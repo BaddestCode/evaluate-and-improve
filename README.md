@@ -1,6 +1,6 @@
 # Evaluate & Improve
 
-You see a clever repo. Watch a smart video. Read a blog post with a technique you've never tried. And you think: *"That's smart — would that actually help me with what I'm building?"*
+You see a clever repo. Watch a smart video. Read a blog post with a technique you've never tried. And you think: *"That's smart... would that actually help me with what I'm building?"*
 
 Answering that properly takes 30 minutes minimum. So you bookmark it. You never come back.
 
