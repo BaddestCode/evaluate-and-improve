@@ -1,149 +1,114 @@
 # Evaluate & Improve
 
-You watch a YouTube video about some clever workflow trick. You see a GitHub repo with 10k stars doing something your project kind of does, but differently. Someone drops a blog post in Slack about a new approach to memory management. And you think: *"That's smart. Would that actually help me, though?"*
+**Stop bookmarking repos you'll never revisit.** One command turns any GitHub repo, YouTube video, or article into a structured verdict: adopt it, adapt it, learn from it, or skip it.
 
-Figuring that out properly takes ages. You'd need to deeply understand what the source is doing, deeply understand your own setup, map one against the other, and make an honest call about whether the juice is worth the squeeze. Most people either skip it entirely or spend an hour down a rabbit hole and come out with "maybe?"
+```bash
+# Install in 30 seconds:
+mkdir -p .claude/skills && cd .claude/skills && git clone https://github.com/baddest-code/evaluate-and-improve.git
+```
 
-This is a Claude Code skill that does that analysis for you. One command, any source.
+Then in Claude Code: `evaluate this https://github.com/someone/cool-repo`
 
-## What it does
+---
 
-Drop in a GitHub repo, YouTube video, or article. The skill:
+## The problem
 
-1. **Learns your repo first.** On first run, it reads your README, CLAUDE.md, package.json, docs, architecture files - whatever's available. It builds the same understanding a CTO would have after their first week at your company. What you're building, how work flows, what tools you use, what you're trying to achieve.
+The rate of new tools, workflows, and techniques is relentless. Every week there's a repo with 10k stars, a YouTube video showing a clever trick, a blog post about a better way to handle context or memory or prompts. You watch it and think: *"That's smart. Would that actually help me with what I'm doing?"*
 
-2. **Deeply researches the source.** Three parallel agents tear apart the repo, video, or article. Not a skim - it reads source files, pulls YouTube transcripts, follows linked resources, checks the author's credibility, and looks at what the community thinks.
+Answering that properly is a 30-minute job minimum. You'd need to deeply read the source, deeply understand your own setup, map one against the other, and make an honest call. Most people either skip it (and miss genuine improvements) or go down the rabbit hole and come out with "maybe?"
 
-3. **Makes the honest call.** It maps the source's capabilities against your actual setup. Not "this is cool" but "this is better than what we already do for X, and here's the concrete PR to adopt it." Built-in protection against wasting your time: it won't recommend changes unless it has high confidence they're a genuine improvement for your specific context. Most things get filed as useful knowledge, not action items.
+## What this does
+
+**One command. Any source. A CTO-grade verdict in minutes.**
+
+1. **It learns your repo first.** Reads your README, CLAUDE.md, package.json, architecture docs - whatever exists. It builds the same understanding a CTO would have after a week at your company: what you're building, how work flows, what you're trying to achieve.
+
+2. **It deeply researches the source.** Three parallel agents pull apart the repo, video, or article. Not a skim - it reads source files, pulls full YouTube transcripts natively (no API key needed), follows linked resources, and checks what the community thinks. For YouTube, it uses a built-in transcript tool that the YouTube API doesn't offer - it grabs auto-generated captions directly.
+
+3. **It protects your time.** The built-in bias is towards "not much to do here." It won't recommend changes just because something is popular or clever. It needs to see that the source genuinely improves something you're actively doing, frequently, with a clear path to integration. A CTO who says "yes" to everything isn't a good CTO.
 
 ## Your learnings compound
 
-Every evaluation gets stored as structured files in a `learnings/` folder. This matters more than it sounds.
+Every evaluation gets stored as structured files in a `learnings/` folder. This is the part that matters most over time.
 
-Three months from now, you're refactoring your memory system and you vaguely remember that repo someone shared about context management. Instead of searching your browser history, you check `learnings/INDEX.md`. There it is - the full analysis, the specific patterns worth remembering, and exactly when you'd want to revisit it.
+Three months from now you're improving your memory system and you think: "What was that thing I saw about context management?" Instead of searching your browser history, you check `learnings/INDEX.md`. The full analysis is there - the specific patterns, how they work, and when you'd want to revisit them.
 
-The skill builds a **patterns library** over time. Each evaluation extracts reusable techniques - tagged by what they solve, how they work, and when they'd become relevant. Your team's knowledge about external approaches accumulates in one searchable place.
+The skill builds a **patterns library** that grows with every evaluation. Each one extracts reusable techniques tagged by what they solve and when they'd become relevant. Your team's external knowledge accumulates in one searchable place. Not bookmarks. Not "I'll remember." Actual structured reference you'll use.
 
-## Install (~2 minutes)
+## Install
 
-### 1. Copy the skill into your repo
+### Quick setup (~60 seconds)
 
 ```bash
 # From your repo root:
-mkdir -p .claude/skills
-cd .claude/skills
+mkdir -p .claude/skills && cd .claude/skills
 git clone https://github.com/baddest-code/evaluate-and-improve.git
+
+# YouTube transcript support (recommended):
+cd ../.. && python3 -m venv .venv && source .venv/bin/activate && pip install youtube-transcript-api
 ```
 
-Or download and copy manually - the skill is just files, no build step.
+That's it. The skill auto-discovers your repo on first use. No config file, no API keys.
 
-Your structure should look like:
+### What you get
 
 ```
 .claude/skills/evaluate-and-improve/
-  SKILL.md
-  references/
-    evaluation-framework.md
-    tools-setup.md
-  tools/
-    youtube-transcript.py
+  SKILL.md                          # The skill itself
+  references/evaluation-framework.md # Scoring criteria and verdict thresholds
+  references/tools-setup.md          # Tool setup reference
+  tools/youtube-transcript.py        # YouTube transcript extraction (no API key needed)
 ```
-
-### 2. Set up YouTube transcript extraction
-
-```bash
-# From your repo root:
-python3 -m venv .venv
-source .venv/bin/activate
-pip install youtube-transcript-api
-```
-
-This lets the skill automatically pull transcripts from YouTube videos. If Python isn't available, you can paste transcripts manually, but the tool is strongly recommended.
-
-### 3. You're done
-
-The skill auto-discovers your repo on first use. No configuration needed.
 
 ## Usage
 
-In Claude Code, say any of:
+```
+evaluate this https://github.com/someone/cool-repo
+evaluate this https://youtube.com/watch?v=abc123
+what can we learn from https://blog.example.com/article
+```
 
-- `/evaluate-and-improve https://github.com/someone/cool-repo`
-- `evaluate this: https://youtube.com/watch?v=...`
-- `what can we learn from https://blog.example.com/some-article`
-- `check this out: <paste a README or transcript>`
+On first run, it creates `learnings/` with an INDEX.md. Every evaluation after that adds to it.
 
-### First run
+## How it works
 
-On first use, the skill creates a `learnings/` folder at your repo root with an INDEX.md. This is where all evaluations are stored.
-
-### What happens
-
-1. **Three parallel agents** deeply analyse the source, your repo, and the competitive context
-2. **Smell test** catches hype, invented problems, and weak evidence
-3. **Capability mapping** compares the source's approach to your current setup
-4. **Concrete PR planning** - before deciding on a verdict, it sketches what adoption would actually look like. If it can't describe the PR, the answer is "learn, don't act"
-5. **Verdict** with structured output in `learnings/<slug>/`
+1. **Three parallel agents** deeply analyse the source, your repo, and the competitive landscape
+2. **Smell test** catches hype, invented problems, and sources that sound clever but lack evidence
+3. **Capability mapping** compares what the source does against your current approach
+4. **Concrete PR planning** - before deciding, it sketches what adoption would actually look like. If it can't describe the PR, the answer is "learn, don't act"
+5. **Verdict** with full analysis in `learnings/<slug>/`
 
 ## The four verdicts
 
 | Verdict | What it means | How often |
 |---------|--------------|-----------|
 | **Adopt** | This is genuinely better than what you have. Here's the implementation plan. 95%+ confidence. | Rare |
-| **Adapt** | Parts of this are valuable, but your setup needs a tailored version. Here's what to take and what to leave. | Occasional |
-| **Learn** | Smart stuff in here. Nothing to change right now, but the patterns are filed for when they become relevant. | Most common |
-| **Skip** | Not useful for what you're doing. Brief note so nobody re-evaluates it later. | Common |
+| **Adapt** | Parts of this are valuable. Here's what to take, what to leave, and how to tailor it. | Occasional |
+| **Learn** | Smart patterns in here. Nothing to change now, but filed for when they become relevant. | Most common |
+| **Skip** | Not useful for what you're doing. Noted so nobody re-evaluates it later. | Common |
 
-**The default is Learn or Skip.** The skill is protective of your time. It won't tell you to adopt something just because it's popular or clever. It needs to see that the source genuinely improves something you're actively doing, with a clear path to integration, before it recommends action. A CTO who says "yes" to everything isn't a good CTO.
+## Sources it handles
 
-## Output structure
+| Source | How it works |
+|--------|-------------|
+| **GitHub repos** | Reads README, file tree, key source files, and metadata via GitHub API |
+| **YouTube videos** | Extracts full transcripts natively using built-in tool (no API key). Follows linked repos and resources |
+| **Articles & blogs** | Reads the full page via WebFetch. Follows referenced tools and repos |
 
-For each evaluation, the skill creates:
-
-```
-learnings/<source-slug>/
-  summary.md              - what the source does, metadata, key stats
-  analysis.md             - deep CTO review with scores and capability mapping
-  recommendations.md      - verdict, patterns to remember, implementation plan (if warranted)
-```
-
-Plus an entry in `learnings/INDEX.md` with a patterns library that grows over time.
-
-## How it handles different sources
-
-### GitHub Repos
-Reads the README, file tree, key source files, and metadata via GitHub's API. Analyses architecture, patterns, documentation quality, and maintenance status.
-
-### YouTube Videos
-Extracts transcripts automatically using the included Python tool. Analyses techniques discussed, follows linked repos/resources, and evaluates the creator's credibility. Falls back to manual paste if captions are disabled.
-
-### Articles & Blog Posts
-Uses Claude Code's `WebFetch` to read the full page. Extracts key techniques, referenced tools, and actionable patterns. Follows links to any repos or tools mentioned.
-
-## Scoring criteria
+## Scoring
 
 | Criterion | Weight | What it measures |
 |-----------|--------|-----------------|
-| Relevance | 2x | Does this help you do something you're actively doing, faster or better? |
-| Quality | 2x | Is this actually a good approach? Sound technique, well-regarded, or are there better ways? |
-| Freshness | 1x | How recent? Using current tools and approaches? |
-| Integration Effort | 1x | Drop-in vs. requires restructuring your workflows |
-| Signal Strength | 1x | Author credibility, stars, trusted recommendations |
-
-## Customisation
-
-The skill auto-discovers your repo by reading README.md, CLAUDE.md, package.json, and any docs or architecture files it can find. No configuration file needed.
-
-If you want to influence the evaluation:
-- A good **README.md** helps the skill understand what your project does
-- A **CLAUDE.md** helps it understand your workflows and tool stack
-- The skill reads whatever context is available and adapts
+| Relevance | 2x | Does this improve something you're actively doing, frequently? |
+| Quality | 2x | Is this genuinely a good approach, or are there better ways? |
+| Freshness | 1x | How recent? Using current tools? |
+| Integration Effort | 1x | Drop-in vs. requires restructuring |
+| Signal Strength | 1x | Author credibility, community reception |
 
 ## Requirements
 
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview)
-- Python 3.8+ (for YouTube transcripts)
-- `youtube-transcript-api` package (installed via pip)
+- Python 3.8+ with `youtube-transcript-api` (for YouTube transcripts)
 
 ## License
 
