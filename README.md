@@ -1,8 +1,28 @@
 # Evaluate & Improve
 
-A Claude Code skill that acts as a sceptical CTO, peer-reviewing external GitHub repos, YouTube videos, and articles against the goals of whatever repo it's installed in.
+You watch a YouTube video about some clever workflow trick. You see a GitHub repo with 10k stars doing something your project kind of does, but differently. Someone drops a blog post in Slack about a new approach to memory management. And you think: *"That's smart. Would that actually help me, though?"*
 
-It scores sources on 5 dimensions, delivers one of four verdicts (Adopt / Adapt / Learn / Skip), and stores structured learnings your team can reference later. Built-in bias towards "not much to do here" - only recommends changes at high confidence.
+Figuring that out properly takes ages. You'd need to deeply understand what the source is doing, deeply understand your own setup, map one against the other, and make an honest call about whether the juice is worth the squeeze. Most people either skip it entirely or spend an hour down a rabbit hole and come out with "maybe?"
+
+This is a Claude Code skill that does that analysis for you. One command, any source.
+
+## What it does
+
+Drop in a GitHub repo, YouTube video, or article. The skill:
+
+1. **Learns your repo first.** On first run, it reads your README, CLAUDE.md, package.json, docs, architecture files - whatever's available. It builds the same understanding a CTO would have after their first week at your company. What you're building, how work flows, what tools you use, what you're trying to achieve.
+
+2. **Deeply researches the source.** Three parallel agents tear apart the repo, video, or article. Not a skim - it reads source files, pulls YouTube transcripts, follows linked resources, checks the author's credibility, and looks at what the community thinks.
+
+3. **Makes the honest call.** It maps the source's capabilities against your actual setup. Not "this is cool" but "this is better than what we already do for X, and here's the concrete PR to adopt it." Built-in protection against wasting your time: it won't recommend changes unless it has high confidence they're a genuine improvement for your specific context. Most things get filed as useful knowledge, not action items.
+
+## Your learnings compound
+
+Every evaluation gets stored as structured files in a `learnings/` folder. This matters more than it sounds.
+
+Three months from now, you're refactoring your memory system and you vaguely remember that repo someone shared about context management. Instead of searching your browser history, you check `learnings/INDEX.md`. There it is - the full analysis, the specific patterns worth remembering, and exactly when you'd want to revisit it.
+
+The skill builds a **patterns library** over time. Each evaluation extracts reusable techniques - tagged by what they solve, how they work, and when they'd become relevant. Your team's knowledge about external approaches accumulates in one searchable place.
 
 ## Install (~2 minutes)
 
@@ -62,22 +82,21 @@ On first use, the skill creates a `learnings/` folder at your repo root with an 
 1. **Three parallel agents** deeply analyse the source, your repo, and the competitive context
 2. **Smell test** catches hype, invented problems, and weak evidence
 3. **Capability mapping** compares the source's approach to your current setup
-4. **Scoring** against 5 weighted criteria (relevance, quality, freshness, integration effort, signal strength)
-5. **Concrete PR planning** sketches what adoption would actually look like before deciding
-6. **Verdict** with structured output in `learnings/<slug>/`
+4. **Concrete PR planning** - before deciding on a verdict, it sketches what adoption would actually look like. If it can't describe the PR, the answer is "learn, don't act"
+5. **Verdict** with structured output in `learnings/<slug>/`
 
-## The Four Verdicts
+## The four verdicts
 
-| Verdict | What it means | Composite score | How often |
-|---------|--------------|-----------------|-----------|
-| **Adopt** | Use as-is or near-verbatim. 95%+ confidence it's better than what you have. | 4.0+ with no conflicts | Rare |
-| **Adapt** | Valuable, but your context needs modifications. Comes with a specific tailoring plan. | 3.0+ with minor/no conflicts | Occasional |
-| **Learn** | Useful knowledge stored for future reference. No immediate changes. | 2.0+ | Most common |
-| **Skip** | Not relevant right now. Brief note so you don't re-evaluate later. | <2.0 or major conflicts | Common |
+| Verdict | What it means | How often |
+|---------|--------------|-----------|
+| **Adopt** | This is genuinely better than what you have. Here's the implementation plan. 95%+ confidence. | Rare |
+| **Adapt** | Parts of this are valuable, but your setup needs a tailored version. Here's what to take and what to leave. | Occasional |
+| **Learn** | Smart stuff in here. Nothing to change right now, but the patterns are filed for when they become relevant. | Most common |
+| **Skip** | Not useful for what you're doing. Brief note so nobody re-evaluates it later. | Common |
 
-The default is Learn or Skip. The skill is deliberately hard to impress.
+**The default is Learn or Skip.** The skill is protective of your time. It won't tell you to adopt something just because it's popular or clever. It needs to see that the source genuinely improves something you're actively doing, with a clear path to integration, before it recommends action. A CTO who says "yes" to everything isn't a good CTO.
 
-## Output Structure
+## Output structure
 
 For each evaluation, the skill creates:
 
@@ -90,7 +109,7 @@ learnings/<source-slug>/
 
 Plus an entry in `learnings/INDEX.md` with a patterns library that grows over time.
 
-## How It Handles Different Sources
+## How it handles different sources
 
 ### GitHub Repos
 Reads the README, file tree, key source files, and metadata via GitHub's API. Analyses architecture, patterns, documentation quality, and maintenance status.
@@ -101,14 +120,14 @@ Extracts transcripts automatically using the included Python tool. Analyses tech
 ### Articles & Blog Posts
 Uses Claude Code's `WebFetch` to read the full page. Extracts key techniques, referenced tools, and actionable patterns. Follows links to any repos or tools mentioned.
 
-## Scoring Criteria
+## Scoring criteria
 
 | Criterion | Weight | What it measures |
 |-----------|--------|-----------------|
-| Relevance | 2x | Does this solve a problem you actually have? |
+| Relevance | 2x | Does this help you do something you're actively doing, faster or better? |
 | Quality | 2x | Documentation, maintenance, community, code quality |
-| Freshness | 1x | How recent? Using current tools/approaches? |
-| Integration Effort | 1x | Drop-in vs. requires restructuring |
+| Freshness | 1x | How recent? Using current tools and approaches? |
+| Integration Effort | 1x | Drop-in vs. requires restructuring your workflows |
 | Signal Strength | 1x | Author credibility, stars, trusted recommendations |
 
 ## Customisation

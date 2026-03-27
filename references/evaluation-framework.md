@@ -40,7 +40,7 @@ Rate each source on these dimensions (1-5 scale):
 
 | Criterion | 1 (Low) | 5 (High) |
 |-----------|---------|----------|
-| **Relevance** | Solves a problem we don't have | Directly addresses a current limitation |
+| **Relevance** | Unrelated to what you're actively doing | Directly improves something you do frequently |
 | **Quality** | Poorly documented, buggy, abandoned | Well-maintained, clear docs, active community |
 | **Freshness** | >6 months old, uses outdated tools | <3 months old, uses latest versions |
 | **Integration Effort** | Would require rewriting our workflows | Drop-in or minimal adaptation |
