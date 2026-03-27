@@ -432,7 +432,7 @@ Present a concise summary:
 
 > **Source:** <name> (<stars> stars, last updated <date>)
 >
-> **Verdict: <Adopt/Adapt/Learn/Skip>** (Composite: X.X/5)
+> **Verdict: <Adopt/Adapt/Learn/Skip>**
 >
 > **Top 3 insights:**
 > 1. <insight and why it matters for us>
@@ -459,9 +459,9 @@ If the user provides multiple links at once:
 1. Process each one sequentially (not in parallel - each needs full attention)
 2. After all are processed, present a comparison table:
 
-| Source | Verdict | Composite | Top Insight | Action |
-|--------|---------|-----------|-------------|--------|
-| <name> | <verdict> | X.X | <insight> | <action> |
+| Source | Verdict | Filter caught at | Top Insight | Action |
+|--------|---------|-----------------|-------------|--------|
+| <name> | <verdict> | <filter or "passed all"> | <insight> | <action> |
 
 3. If multiple sources solve the same problem, recommend the best one and explain why
 4. Update INDEX.md with all entries

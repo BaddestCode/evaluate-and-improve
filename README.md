@@ -1,39 +1,42 @@
 # Evaluate & Improve
 
-**Stop bookmarking repos you'll never revisit.** One command turns any GitHub repo, YouTube video, or article into a structured verdict: adopt it, adapt it, learn from it, or skip it.
+You see a clever repo. Watch a smart video. Read a blog post with a technique you've never tried. And you think: *"That's smart — would that actually help me with what I'm building?"*
+
+Answering that properly takes 30 minutes minimum. So you bookmark it. You never come back.
+
+**Evaluate & Improve** is a Claude Code skill that does that work for you.
 
 ```bash
-# Install in 30 seconds:
+# One command to install:
 mkdir -p .claude/skills && cd .claude/skills && git clone https://github.com/BaddestCode/evaluate-and-improve.git
 ```
 
-Then in Claude Code: `evaluate this...` insert youtube/github/blog URL
+```
+# One command to run:
+evaluate this <github-url / youtube-url / article-url>
+```
 
 ---
 
-## The problem
+## What it does
 
-The rate of new tools, workflows, and techniques is relentless. Every week there's a repo with 10k stars, a YouTube video showing a clever trick, a blog post about a better way to handle context or memory or prompts. You watch it and think: *"That's smart. Would that actually help me with what I'm doing?"*
+**1. Learns your repo first**
 
-Answering that properly is a 30-minute job minimum. You'd need to deeply read the source, deeply understand your own setup, map one against the other, and make an honest call. Most people either skip it (and miss genuine improvements) or go down the rabbit hole and come out with "maybe?"
+First run, it reads your README, CLAUDE.md, package.json, architecture docs — whatever's there. Same context a CTO would absorb in their first week at your company: your goals, your stack, how your team works. Done in one command.
 
-## What this does
+**2. Deeply researches the source**
 
-**One command. Any source. A CTO-grade verdict in minutes.**
+Three parallel agents pull apart the repo, video, or article. Not a skim — it reads actual source files, not just the README. Pulls full YouTube transcripts natively, with no API key and no copy-pasting. (The YouTube API doesn't offer transcripts. This tool grabs auto-generated captions directly — it's genuinely unusual.)
 
-1. **It learns your repo first.** Reads your README, CLAUDE.md, package.json, architecture docs - whatever exists. It builds the same understanding a CTO would have after a week at your company: what you're building, how work flows, what you're trying to achieve.
+**3. Filters with built-in protection over your time**
 
-2. **It deeply researches the source.** Three parallel agents pull apart the repo, video, or article. Not a skim - it reads source files, pulls full YouTube transcripts natively (no API key needed), follows linked resources, and checks what the community thinks. For YouTube, it uses a built-in transcript tool that the YouTube API doesn't offer - it grabs auto-generated captions directly.
+Not a hype machine. The built-in bias is towards "not much to do here." It only recommends a change when there's something specific worth pinching, a clear PR to write, and confidence the disruption is worth it. A CTO who says yes to everything isn't a good CTO.
 
-3. **It protects your time.** The built-in bias is towards "not much to do here." It won't recommend changes just because something is popular or clever. It needs to see that the source genuinely improves something you're actively doing, frequently, with a clear path to integration. A CTO who says "yes" to everything isn't a good CTO.
+## Your learnings don't disappear
 
-## Your learnings compound
+Every evaluation gets stored in a `learnings/` folder. Six months later you're improving your memory system and think: *"What was that context management pattern I read about?"* Your learnings index has the answer — the specific technique, why it was filed, and when you'd use it.
 
-Every evaluation gets stored as structured files in a `learnings/` folder. This is the part that matters most over time.
-
-Three months from now you're improving your memory system and you think: "What was that thing I saw about context management?" Instead of searching your browser history, you check `learnings/INDEX.md`. The full analysis is there - the specific patterns, how they work, and when you'd want to revisit them.
-
-The skill builds a **patterns library** that grows with every evaluation. Each one extracts reusable techniques tagged by what they solve and when they'd become relevant. Your team's external knowledge accumulates in one searchable place. Not bookmarks. Not "I'll remember." Actual structured reference you'll use.
+You might not need it today. The best CTOs have incredible recall — they remember things exist when the right problem surfaces. This is that, but searchable.
 
 ## Install
 
@@ -42,7 +45,7 @@ The skill builds a **patterns library** that grows with every evaluation. Each o
 ```bash
 # From your repo root:
 mkdir -p .claude/skills && cd .claude/skills
-git clone https://github.com/baddest-code/evaluate-and-improve.git
+git clone https://github.com/BaddestCode/evaluate-and-improve.git
 
 # YouTube transcript support (recommended):
 cd ../.. && python3 -m venv .venv && source .venv/bin/activate && pip install youtube-transcript-api
