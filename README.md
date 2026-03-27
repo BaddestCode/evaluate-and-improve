@@ -4,7 +4,7 @@
 
 ```bash
 # Install in 30 seconds:
-mkdir -p .claude/skills && cd .claude/skills && git clone https://github.com/baddest-code/evaluate-and-improve.git
+mkdir -p .claude/skills && cd .claude/skills && git clone https://github.com/BaddestCode/evaluate-and-improve.git
 ```
 
 Then in Claude Code: `evaluate this...` insert youtube/github/blog URL
