@@ -7,7 +7,7 @@
 mkdir -p .claude/skills && cd .claude/skills && git clone https://github.com/baddest-code/evaluate-and-improve.git
 ```
 
-Then in Claude Code: `evaluate this https://github.com/someone/cool-repo`
+Then in Claude Code: `evaluate this...` insert youtube/github/blog URL
 
 ---
 
