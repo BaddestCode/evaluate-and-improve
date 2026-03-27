@@ -1,69 +1,94 @@
 # Evaluation Framework
 
-Read this before scoring any external source. It defines the criteria and thresholds for the four verdicts.
+Read this before evaluating any external source. It defines how a CTO actually decides whether something is worth adopting.
 
-## Verdict Definitions
+## How Great CTOs Actually Evaluate Things
 
-### Adopt
-**Threshold:** 95%+ confidence this is better than what we have AND can be integrated without breaking existing workflows.
-- The source does something we need that we don't currently do, OR
-- The source does something we already do but measurably better
-- Integration effort is low relative to the improvement
-- Well-maintained (recent commits, active issues, clear docs)
-- **Bias:** This is the rarest verdict. Default away from it unless the case is overwhelming.
+They don't use scoring rubrics. They run the source through a series of filters. Most things get caught early. Each filter either lets something through to the next stage, redirects it to Learn (store the knowledge), or stops it at Skip (not relevant). The verdict emerges from where things land, not from adding up numbers.
 
-### Adapt
-**Threshold:** 80%+ confidence some elements are valuable, but our context requires modification.
-- Parts of the approach are genuinely better than ours
-- Needs tailoring for our workflow patterns, repo structure, or team size
-- The valuable parts can be extracted without importing the whole thing
-- **Output:** Specific recommendations on what to take and how to modify it
+## The Five Filters
 
-### Learn
-**Threshold:** The source teaches something useful even if we don't change anything right now.
-- Interesting patterns or techniques to reference later
-- Solves a problem we might have in the future
-- Well-executed approach worth understanding even if not adopting
-- **Output:** Knowledge stored in the learnings folder for future reference
+### Filter 1: "Does this touch something I'm actually dealing with?"
 
-### Skip
-**Threshold:** Not relevant to our goals right now, or what we have is already better.
-- Solves a problem we don't have
-- Our existing approach is already superior for our context
-- Too complex for our team size or stage
-- Poorly maintained or outdated
-- **Output:** Brief note explaining why, so we don't re-evaluate the same thing
+Not theoretically relevant. Specifically: am I wrestling with this problem right now? Is this something I'm actively building, maintaining, or trying to improve? If the answer is "maybe someday," it's an automatic Learn at best. File the pattern, move on.
 
-## Scoring Criteria
+**Passes if:** You can name the specific thing in your repo or workflow that this relates to, and you've worked on it recently.
 
-Rate each source on these dimensions (1-5 scale):
+**Fails if:** You have to stretch to find the connection, or the connection is abstract ("this is about code quality and we write code").
 
-| Criterion | 1 (Low) | 5 (High) |
-|-----------|---------|----------|
-| **Relevance** | Unrelated to what you're actively doing | Directly improves something you do frequently |
-| **Quality** | Questionable approach, unproven, or better alternatives exist | Sound technique, well-regarded in the space, genuinely good way to solve this |
-| **Freshness** | >6 months old, uses outdated tools | <3 months old, uses latest versions |
-| **Integration Effort** | Would require rewriting our workflows | Drop-in or minimal adaptation |
-| **Signal Strength** | Unknown author, no stars | High-credibility source, many stars, recommended by trusted people |
+### Filter 2: "Is this actually good?"
 
-**Composite score:** Average of all 5. But relevance and quality are weighted 2x.
+This is taste, not a checklist. After reading the source deeply (not just the README), does the approach feel right? Is there evidence it works in production, not just in demos? Has the author shipped real things?
 
-**Composite = (Relevance*2 + Quality*2 + Freshness + Integration Effort + Signal Strength) / 9**
+Watch for:
+- **Invented problems** - tools that exist because someone wanted to build something, not because there was genuine need
+- **Demo-only quality** - looks great in a 5-minute video, falls apart at scale
+- **Hype-to-substance ratio** - viral Twitter repos vs. steady organic growth
+- **Better alternatives** - is this actually the best approach to this problem, or are there well-known better ways?
 
-## Red Flags (auto-lower score)
+**Passes if:** The approach is sound, the implementation is solid, and you'd trust it in your system. A tiny repo with one brilliant technique passes. A 10k-star repo with a questionable approach fails.
+
+**Fails if:** It's hype, it's solving an invented problem, or there are clearly better alternatives. Fast-track to Skip.
+
+### Filter 3: "What specifically would I pinch?"
+
+Great CTOs are cherry-pickers. They look at a repo with 20 features and say "that one technique is clever, the rest is noise." Be specific: name the exact thing you'd take. Not "their approach to X" but "their specific technique of doing Y in file Z."
+
+**Passes if:** You can list specific, concrete things worth taking - techniques, patterns, configurations, approaches. Each one should be describable in a sentence.
+
+**Fails if:** You can't name anything specific. "It's generally interesting" means Learn. "Nothing useful for us" means Skip.
+
+### Filter 4: "Can I see the change?"
+
+Can you literally picture the PR? What files get created or modified? What's the diff? How long does it take? This is the reality check that separates "interesting" from "actionable."
+
+**Write down:**
+- Files created and where they go
+- Files modified and what changes
+- Dependencies added (tools, packages, setup steps)
+- Config changes needed
+- Time estimate (30-minute PR or 3-day refactor?)
+- What could break and how you'd roll back
+
+**Passes if:** The PR is clear in your head. You could write the ticket right now.
+
+**Fails if:** You can't describe the change concretely. This is a Learn - the knowledge is valuable but you're not ready to act on it.
+
+### Filter 5: "Is the juice worth the squeeze?"
+
+Given the specific change you'd make: is the improvement worth the disruption? Think about:
+- **Maintenance burden** - who maintains this after it's in? Does it add ongoing complexity?
+- **Cognitive load** - would a new team member look at this and be confused?
+- **Opportunity cost** - is this the best use of time right now, vs. the other things on the list?
+- **Reversibility** - can you try it and back out if it doesn't work?
+
+**Passes if:** The improvement clearly outweighs the cost, and you'd still want this in 3 months.
+
+**Fails if:** The improvement is marginal, the disruption is high, or there are more important things to do. This is a Learn - store the pattern for when the calculus changes.
+
+## How Filters Map to Verdicts
+
+| Where it lands | Verdict |
+|---------------|---------|
+| Passes all 5 filters with high confidence. The change is clear, the improvement is significant, and you'd do it this week. | **Adopt** |
+| Passes filters 1-4, but needs tailoring. The technique is sound but your context requires modification. You can describe what to take and what to change. | **Adapt** |
+| Caught at filter 1 (not dealing with this right now), filter 3 (interesting but nothing specific to pinch), or filter 4 (can't describe the PR). The source has genuine value worth remembering. | **Learn** |
+| Caught at filter 2 (not actually good), or passes nothing. Not relevant, not useful, or we already do it better. | **Skip** |
+
+**The default is Learn or Skip.** Adopt is rare - it requires passing every filter with confidence. Most things are interesting but not actionable right now, and that's fine. The learnings folder exists precisely for this.
+
+## Warning Signs (Bias Towards Skip)
 
 - No README or sparse documentation
 - Last commit >6 months ago with no explanation
-- Depends on tools/services we don't use and won't adopt
-- Adds complexity without clear benefit
 - "Kitchen sink" repos that try to do everything
 - No license or restrictive license
+- Depends on tools or services you don't use and won't adopt
 
-## Green Flags (auto-raise score)
+## Good Signs (Bias Towards Deeper Look)
 
-- Recommended by someone trusted
-- >500 GitHub stars with recent activity
-- Clear, opinionated documentation
+- Recommended by someone you trust
 - Solves a specific problem well rather than being a framework for everything
-- Uses tools we already have
-- Author has credibility in the space
+- Uses tools you already have
+- Author has shipped real production systems
+- Clear, opinionated documentation that makes trade-offs explicit

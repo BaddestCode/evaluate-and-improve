@@ -73,10 +73,9 @@ On first run, it creates `learnings/` with an INDEX.md. Every evaluation after t
 ## How it works
 
 1. **Three parallel agents** deeply analyse the source, your repo, and the competitive landscape
-2. **Smell test** catches hype, invented problems, and sources that sound clever but lack evidence
-3. **Capability mapping** compares what the source does against your current approach
-4. **Concrete PR planning** - before deciding, it sketches what adoption would actually look like. If it can't describe the PR, the answer is "learn, don't act"
-5. **Verdict** with full analysis in `learnings/<slug>/`
+2. **Five filters** - the same way a great CTO actually thinks: is this relevant to what I'm doing? Is it actually good? What specifically would I pinch? Can I picture the PR? Is it worth the disruption?
+3. **Most things get caught early.** If the source is hype, filter 2 catches it. Interesting but vague? Filter 3. Can't describe the change? Filter 4.
+4. **Verdict** with full analysis in `learnings/<slug>/`
 
 ## The four verdicts
 
@@ -95,15 +94,19 @@ On first run, it creates `learnings/` with an INDEX.md. Every evaluation after t
 | **YouTube videos** | Extracts full transcripts natively using built-in tool (no API key). Follows linked repos and resources |
 | **Articles & blogs** | Reads the full page via WebFetch. Follows referenced tools and repos |
 
-## Scoring
+## How it decides
 
-| Criterion | Weight | What it measures |
-|-----------|--------|-----------------|
-| Relevance | 2x | Does this improve something you're actively doing, frequently? |
-| Quality | 2x | Is this genuinely a good approach, or are there better ways? |
-| Freshness | 1x | How recent? Using current tools? |
-| Integration Effort | 1x | Drop-in vs. requires restructuring |
-| Signal Strength | 1x | Author credibility, community reception |
+No arbitrary scoring formula. The skill runs the source through five filters, the same way a great CTO actually thinks:
+
+| Filter | The question | If it fails |
+|--------|-------------|-------------|
+| **1. Active problem?** | Does this touch something you're actually dealing with right now? | Learn or Skip |
+| **2. Actually good?** | Is the approach sound, or is it hype? Any evidence it works in production? | Fast-track to Skip |
+| **3. What would I pinch?** | Name the specific techniques worth taking. Not "generally interesting" - specific. | Learn |
+| **4. Can I see the change?** | Can you picture the PR? What files change? How long? | Learn |
+| **5. Worth the disruption?** | Is the improvement worth the maintenance burden and cognitive load? | Learn |
+
+Most things get caught early. That's by design.
 
 ## Requirements
 

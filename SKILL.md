@@ -196,55 +196,44 @@ This agent must understand your repo the way a new CTO would on their first week
 
 This is the most important step. You are making a strategic decision about whether to invest time in this source.
 
-Using all three agents' findings, work through this analysis:
+Read `references/evaluation-framework.md` for the full filter definitions. Then, using all three agents' findings, run the source through the five filters below. Most things get caught early - that's by design.
 
-### 2a. Smell Test: Is This Source Genuinely Smart?
+### Filter 1: "Does this touch something I'm actually dealing with?"
 
-Before mapping capabilities, stop and critically assess the source itself. Not everything with stars is good. Not every YouTube video with views has substance.
+Not theoretically relevant. Specifically: is the team wrestling with this problem right now? Is this something they're actively building, maintaining, or trying to improve?
+
+**Using Agent 2's repo understanding:** match the source's capabilities against what the team is actually working on. If the connection requires stretching, it fails this filter.
+
+**If it fails:** The source might be interesting, but it's not addressing anything active. Redirect to **Learn** (store patterns for later) or **Skip** (genuinely irrelevant).
+
+### Filter 2: "Is this actually good?"
+
+This is taste, not a checklist. After reading the source deeply through Agent 1's findings, does the approach feel right?
 
 **Ask yourself:**
-- **Is this solving a real problem or inventing one?** Many tools exist because someone wanted to build something, not because there was genuine need.
-- **Is the approach sound?** Does the technique actually work, or does it just sound clever? Is there evidence (benchmarks, case studies, production usage)?
-- **Is this teaching or is this tooling?** A teaching resource (like a reference library) is fundamentally different from a tool you'd integrate. Be clear about which this is.
-- **Does the author have credibility?** Have they shipped production systems, or is this their first repo? Are they known in the space?
-- **Is the star count earned or viral?** A repo that went viral on Twitter for a day is different from one with steady growth. Check the star history if >5k stars.
+- Is this solving a real problem or inventing one?
+- Does the technique actually work, or does it just sound clever? Any evidence of production usage?
+- Is the star count earned or viral? (A repo that went viral on Twitter for a day is different from one with steady growth.)
+- Are there well-known better alternatives? (Agent 3's competitive context helps here.)
 
-**If the source fails the smell test** (solving an invented problem, no evidence it works, pure hype), you can fast-track to **Skip** here. Write the analysis.md explaining why and move to Step 4. Don't waste time on capability mapping for sources that aren't credible.
+**If it fails** (solving an invented problem, no evidence it works, pure hype): fast-track to **Skip**. Write the analysis.md explaining why and move to Step 4. Don't waste time on downstream filters for sources that aren't credible.
 
-### 2b. Capability Mapping
+### Filter 3: "What specifically would I pinch?"
 
-Create a table mapping the source's capabilities to our current state:
+Be a cherry-picker. Look at the source and name the exact things worth taking. Not "their approach to X" but "their specific technique of doing Y in file Z."
 
-| Source Capability | Our Current Approach | Gap / Overlap | Better? |
-|-------------------|---------------------|---------------|---------|
-| <capability 1> | <what we do now> | <gap/overlap/irrelevant> | <source is better / ours is better / different> |
-| ... | ... | ... | ... |
+**Create a table:**
 
-### 2c. Score Against Framework
+| What I'd Pinch | What We Do Now | Why Theirs Is Better |
+|----------------|---------------|---------------------|
+| <specific technique/pattern> | <our current approach, or "nothing"> | <concrete reason> |
+| ... | ... | ... |
 
-Read `references/evaluation-framework.md` and score:
-- Relevance (1-5, weighted 2x)
-- Quality (1-5, weighted 2x)
-- Freshness (1-5)
-- Integration Effort (1-5)
-- Signal Strength (1-5)
+**If you can't name anything specific:** the source is interesting but there's nothing concrete to take. Redirect to **Learn** (extract the patterns that might be useful later).
 
-**Composite = (Relevance*2 + Quality*2 + Freshness + Integration Effort + Signal Strength) / 9**
+### Filter 4: "Can I see the change?"
 
-### 2d. Conflict Check
-
-- If the source relates to **writing/copy**: does our repo have a brand voice guide? Would adopting this conflict with it? Could it complement without overriding?
-- If the source relates to **memory/context**: how does our repo handle context currently? Would this simplify or complicate?
-- If the source relates to **workflows/skills**: what's our current task pipeline? Would this slot in or require restructuring?
-- If the source relates to **tools/integrations**: check against our current tool stack. Do we already have this capability?
-
-### 2e. Simplicity Test
-
-Ask yourself: "If a new team member joined tomorrow, would adopting this make the repo harder to understand?" If yes, the bar for adoption goes up significantly.
-
-### 2f. What Would the PR Actually Look Like?
-
-This is the reality check. Before determining a verdict, sketch out what adoption would concretely involve. Don't score "Integration Effort: 3/5" without being able to describe the work.
+Can you literally picture the PR? This is the reality check.
 
 **Write down:**
 1. **Files created:** What new files would exist? Where do they go?
@@ -254,64 +243,72 @@ This is the reality check. Before determining a verdict, sketch out what adoptio
 5. **Time estimate:** Is this a 30-minute PR or a 3-day refactor?
 6. **Risk of breakage:** Could this change break existing workflows? What's the rollback plan?
 
-If you can't describe the PR, the verdict is Learn (knowledge stored, nothing to implement). If the PR is clear and small, that raises the case for Adapt or Adopt.
+**If you can't describe the PR:** the verdict is **Learn**. The knowledge is valuable but you're not ready to act on it. Store the patterns.
 
-### 2g. Determine Verdict
+### Filter 5: "Is the juice worth the squeeze?"
 
-Based on the composite score, conflict check, and simplicity test:
+Given the specific change you'd make: is the improvement worth the disruption?
 
-| Composite Score | + No Conflicts | + Minor Conflicts | + Major Conflicts |
-|----------------|---------------|-------------------|-------------------|
-| 4.0+ | **Adopt** (if 95%+ confident) | **Adapt** | **Learn** |
-| 3.0-3.9 | **Adapt** | **Learn** | **Skip** |
-| 2.0-2.9 | **Learn** | **Learn** | **Skip** |
-| <2.0 | **Skip** | **Skip** | **Skip** |
+- **Maintenance burden** - who maintains this after it's in? Does it add ongoing complexity?
+- **Cognitive load** - would a new team member look at this and be confused?
+- **Opportunity cost** - is this the best use of time right now?
+- **Reversibility** - can you try it and back out if it doesn't work?
 
-**Critical rule:** The default is Learn or Skip. Adopt requires overwhelming evidence. Adapt requires clear value with a specific plan for how to tailor it.
+**If it fails:** the improvement is marginal, the disruption is high, or there are more important things to do. Redirect to **Learn** - store the pattern for when the calculus changes.
+
+### Determine Verdict
+
+The verdict comes from where the source lands in the filter chain:
+
+| Where it lands | Verdict |
+|---------------|---------|
+| Passes all 5 filters. The change is clear, the improvement is significant, and you'd do it this week. | **Adopt** |
+| Passes filters 1-4, but needs tailoring. The technique is sound but the context requires modification. | **Adapt** |
+| Caught at filter 1 (not active right now), filter 3 (nothing specific to pinch), or filter 4 (can't describe the PR). Source has genuine value worth remembering. | **Learn** |
+| Caught at filter 2 (not actually good). Not relevant, not useful, or we already do it better. | **Skip** |
+
+**Critical rule:** The default is Learn or Skip. Adopt is rare - it requires passing every filter with confidence. Most things are interesting but not actionable right now, and that's fine. The learnings folder exists precisely for this.
 
 Write `learnings/<slug>/analysis.md`:
 
 ```markdown
 # CTO Analysis: <Source Name>
 
-## Smell Test
-<Findings from 2a. Be blunt.>
+## Filter 1: Does this touch something we're actually dealing with?
+<What specific thing in our repo/workflow does this relate to? Are we actively working on it?>
 
-## Capability Mapping
-<table from 2b>
+## Filter 2: Is this actually good?
+<Taste assessment. Is the approach sound? Evidence it works? Better alternatives? Be blunt.>
 
-## Evaluation Scores
-| Criterion | Score | Notes |
-|-----------|-------|-------|
-| Relevance (2x) | X/5 | <why> |
-| Quality (2x) | X/5 | <why> |
-| Freshness | X/5 | <why> |
-| Integration Effort | X/5 | <why> |
-| Signal Strength | X/5 | <why> |
-| **Composite** | **X.X/5** | |
+## Filter 3: What specifically would I pinch?
 
-## Conflict Check
-<findings from 2d>
+| What I'd Pinch | What We Do Now | Why Theirs Is Better |
+|----------------|---------------|---------------------|
+| <specific thing> | <our approach> | <why> |
 
-## Simplicity Test
-<findings from 2e>
+<If nothing specific, say so.>
 
-## What the PR Would Look Like
-<findings from 2f>
+## Filter 4: Can I see the change?
+<The PR sketch. Files created, files modified, dependencies, time estimate, risk.>
+<If you can't describe it, say so.>
+
+## Filter 5: Is the juice worth the squeeze?
+<Disruption vs. improvement. Maintenance burden. Opportunity cost.>
 
 ## Verdict: <Adopt/Adapt/Learn/Skip>
+**Caught at:** <which filter stopped it, or "passed all">
 
 ### Rationale
-<3-5 sentences explaining the verdict. Be specific about what tipped the balance. If close to a higher verdict, explain what would need to change.>
+<3-5 sentences explaining the verdict. Be specific about what tipped the balance.>
 
 ### What's Genuinely Better Than What We Have
-<Be specific. "Their memory system uses X which solves Y that we currently struggle with because Z.">
+<Be specific. "Their technique for X solves Y that we currently struggle with because Z.">
 
 ### What We Already Do Better
 <Don't undervalue existing work. Be honest about where we're already strong.>
 
-### What's Interesting But Not Worth the Complexity
-<Techniques that are clever but don't justify the integration effort.>
+### What's Worth Remembering
+<Patterns or techniques to file for future reference, even if not acting now.>
 ```
 
 ## Step 3 - Recommendations
