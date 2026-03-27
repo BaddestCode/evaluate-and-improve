@@ -125,7 +125,7 @@ Uses Claude Code's `WebFetch` to read the full page. Extracts key techniques, re
 | Criterion | Weight | What it measures |
 |-----------|--------|-----------------|
 | Relevance | 2x | Does this help you do something you're actively doing, faster or better? |
-| Quality | 2x | Documentation, maintenance, community, code quality |
+| Quality | 2x | Is this actually a good approach? Sound technique, well-regarded, or are there better ways? |
 | Freshness | 1x | How recent? Using current tools and approaches? |
 | Integration Effort | 1x | Drop-in vs. requires restructuring your workflows |
 | Signal Strength | 1x | Author credibility, stars, trusted recommendations |

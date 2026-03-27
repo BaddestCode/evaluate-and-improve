@@ -41,7 +41,7 @@ Rate each source on these dimensions (1-5 scale):
 | Criterion | 1 (Low) | 5 (High) |
 |-----------|---------|----------|
 | **Relevance** | Unrelated to what you're actively doing | Directly improves something you do frequently |
-| **Quality** | Poorly documented, buggy, abandoned | Well-maintained, clear docs, active community |
+| **Quality** | Questionable approach, unproven, or better alternatives exist | Sound technique, well-regarded in the space, genuinely good way to solve this |
 | **Freshness** | >6 months old, uses outdated tools | <3 months old, uses latest versions |
 | **Integration Effort** | Would require rewriting our workflows | Drop-in or minimal adaptation |
 | **Signal Strength** | Unknown author, no stars | High-credibility source, many stars, recommended by trusted people |
